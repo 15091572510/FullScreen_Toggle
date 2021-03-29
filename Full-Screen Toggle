@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>全屏切换笔记</title>
+  <style type="text/css">
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    img {
+      width: 100%;
+    }
+    .swiper-wrapper {
+      position: relative;
+      top: 0;
+      width: 100%;
+      transition: top 0.65s;
+    }
+    .swiper-slide {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.75s ease-out 0.5s, visibility 0.75s ease-out 0.5s;
+    }
+    .swiper-slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+  </style>
+</head>
+<body>
+  <div class="swiper-wrapper" onmousewheel="mousewheel()">
+    <div class="swiper-slide active">
+      <img src="https://www.hjtc123.com/static/image/201910101638476888.jpg" />
+    </div>
+    <div class="swiper-slide">
+      <img src="https://www.hjtc123.com/static/image/service_bg.jpg" />
+    </div>
+    <div class="swiper-slide">
+      <img src="https://www.hjtc123.com/static/image/profile_bg.jpg" />
+    </div>
+    <div class="swiper-slide">
+      <img src="https://www.hjtc123.com/static/image/new_bg.jpg" />
+    </div>
+    <div class="swiper-slide">
+      <img src="https://www.hjtc123.com/static/image/poster.jpg" />
+    </div>
+  </div>
+</body>
+<script type="text/javascript">
+var clientHeight = document.body.clientHeight;
+var wrap = document.querySelector(".swiper-wrapper");
+var slides = document.querySelectorAll(".swiper-slide");
+var len = slides.length;
+
+wrap.style.height = clientHeight + "px";
+for (var i=0; i<len; i++) {
+  slides[i].style.height = clientHeight + "px";
+}
+var currActiveListener = {
+  value: 0,
+  get currActive() {
+    return this.value;
+  },
+  set currActive(_value) {
+    for (var i=0; i<len; i++) {
+      slides[i].classList.remove("active");
+    }
+    this.value = _value;
+    wrap.style.top = - (_value * clientHeight) + "px";
+    slides[_value].classList.add("active");
+  }
+}
+var start_time = 0;
+var end_time = 0;
+function mousewheel() {
+  start_time = new Date().getTime();
+  if (start_time - end_time > 300) {
+    if (event.wheelDelta < 0 && currActiveListener.currActive < len - 1) {
+      currActiveListener.currActive += 1;
+    }
+    if (event.wheelDelta > 0 && currActiveListener.currActive > 0) {
+      currActiveListener.currActive -= 1;
+    }
+    end_time = new Date().getTime();
+  }
+}
+</script>
+</html>
